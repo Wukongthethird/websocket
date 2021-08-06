@@ -72,15 +72,28 @@ class ChatUser {
 
     const joke = response.data.joke
 
-    this.send(JSON.stringify( {
+    this.send(JSON.stringify({
       name: "server",
-      type: "joke",
+      type: "chat",
       text: joke,
-    } ))
-
-    return joke
-
+      })
+    );
   }
+
+  handleMembers() {
+    let membersSet = this.room.members;
+    let members = Array.from(membersSet);
+
+    let memberNames = members.map(m => m.name)
+
+    this.send(JSON.stringify({
+      name: "in room",
+      type: "chat",
+      text: memberNames.join(','),
+    }))
+  }
+
+
   /** Handle messages from client:
    *
    * @param jsonData {string} raw message data
@@ -93,9 +106,11 @@ class ChatUser {
 
   handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
+
     if (msg.type === "join") this.handleJoin(msg.name);
     else if (msg.type === "chat") this.handleChat(msg.text);
     else if (msg.type === "get-joke") this.handleJoke();
+    else if (msg.type === "get-members") this.handleMembers();
     else throw new Error(`bad message: ${msg.type}`);
   }
 
