@@ -83,7 +83,6 @@ class ChatUser {
   handleMembers() {
     let membersSet = this.room.members;
     let members = Array.from(membersSet);
-
     let memberNames = members.map(m => m.name)
 
     this.send(JSON.stringify({
@@ -91,6 +90,13 @@ class ChatUser {
       type: "chat",
       text: memberNames.join(','),
     }))
+  }
+  //input  toUsername , message = > [name] , " message to be sent"
+  handlePrivateMessage(toUsername , message ){
+    // console.log( toUsername)
+    // console.log(message)
+    // console.log(this.room)
+    this.room.privateMessage(this.name,toUsername, message )
   }
 
 
@@ -111,6 +117,7 @@ class ChatUser {
     else if (msg.type === "chat") this.handleChat(msg.text);
     else if (msg.type === "get-joke") this.handleJoke();
     else if (msg.type === "get-members") this.handleMembers();
+    else if (msg.type === "private-message") this.handlePrivateMessage(msg.toUsername , msg.message);
     else throw new Error(`bad message: ${msg.type}`);
   }
 

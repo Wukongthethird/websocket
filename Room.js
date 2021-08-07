@@ -67,6 +67,18 @@ class Room {
       member.send(JSON.stringify(data));
     }
   }
+
+  privateMessage(fromUsername, toUsername , data) {
+    for (let member of this.members) {
+      if( toUsername === member.name){
+       member.send(JSON.stringify({
+        name: fromUsername ,
+        type: "chat",
+        text: data,
+      }));
+      }
+    }
+  }
 }
 
 module.exports = Room;

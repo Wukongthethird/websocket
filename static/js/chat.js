@@ -66,6 +66,12 @@ $("form").submit(function (evt) {
     data = { type: "get-joke" };
   } else if ($("#m").val() === "/members") {
     data = { type: "get-members" };
+  } else if ( $("#m").val().startsWith('/priv') ){
+    const messageToStrip = $("#m").val().split(" ")
+    const usernameAndMessage = messageToStrip.slice(1)
+    const toUser = usernameAndMessage[0]
+    const message = usernameAndMessage.slice(1).join(" ")
+    data = { type: "private-message" , toUsername:toUser, message:message };
   } else {
     data = { type: "chat", text: $("#m").val() }
   }
